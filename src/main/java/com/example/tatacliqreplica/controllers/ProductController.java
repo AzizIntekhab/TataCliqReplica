@@ -1,6 +1,9 @@
 package com.example.tatacliqreplica.controllers;
 
 import com.example.tatacliqreplica.models.Products;
+import com.example.tatacliqreplica.services.FakeStoreProductService;
+import com.example.tatacliqreplica.services.ProductService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,16 +15,25 @@ import java.util.List;
 @RequestMapping("/products")
 public class ProductController {
 
+    private ProductService productService;
+
+    public ProductController(ProductService productService) {
+
+        this.productService = productService;
+    }
+
+
     @GetMapping()
     public ResponseEntity<List<Products>> getAllProducts() {
 
         return null;
-        //return ResponseEntity(null, HttpStatusCode);
     }
 
     @GetMapping("/{productId}")
     public ResponseEntity<Products> getProductById(@PathVariable("productId") Long productId) {
-        return null;
+
+        Products product = productService.getProductById(productId);
+        return new  ResponseEntity<>(product, HttpStatus.OK);
     }
 
     @PostMapping()
@@ -42,7 +54,7 @@ public class ProductController {
         return null;
     }
 
-    @PatchMapping("{productId}")
+    @PatchMapping("/{productId}")
     public ResponseEntity<Products> updateAProduct(@PathVariable("productId")  Long productId, @RequestBody Products newProduct) {
 
         return null;
