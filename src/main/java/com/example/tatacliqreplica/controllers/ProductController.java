@@ -1,13 +1,11 @@
 package com.example.tatacliqreplica.controllers;
 
+import com.example.tatacliqreplica.exceptions.ProductNotFoundException;
 import com.example.tatacliqreplica.models.Products;
-import com.example.tatacliqreplica.services.FakeStoreProductService;
 import com.example.tatacliqreplica.services.ProductService;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 
@@ -23,40 +21,48 @@ public class ProductController {
     }
 
 
-    @GetMapping()
+    @GetMapping("")
     public ResponseEntity<List<Products>> getAllProducts() {
 
-        return null;
+        List<Products> productsArrayList = productService.getProducts();
+        return new ResponseEntity<>(productsArrayList, HttpStatus.OK);
     }
 
     @GetMapping("/{productId}")
-    public ResponseEntity<Products> getProductById(@PathVariable("productId") Long productId) {
+    public ResponseEntity<Products> getProductById(@PathVariable("productId") Long productId) throws ProductNotFoundException {
 
         Products product = productService.getProductById(productId);
         return new  ResponseEntity<>(product, HttpStatus.OK);
     }
 
-    @PostMapping()
+    @PostMapping("")
     public ResponseEntity<Products> addANewProduct(@RequestBody Products newProduct) {
 
-        return null;
+        Products product = productService.addProduct(newProduct);
+
+
+        return new ResponseEntity<>(product, HttpStatus.OK);
     }
 
     @DeleteMapping("/{productId}")
-    public ResponseEntity<Products> deleteAProduct(@PathVariable("productId") Long productId) {
+    public ResponseEntity<String> deleteAProduct(@PathVariable("productId") Long productId) {
 
-        return null;
+        productService.deleteProduct(productId);
+        return new ResponseEntity<>("Product with " +productId +" is deleted.",HttpStatus.OK);
     }
 
     @PutMapping("/{productId}")
-    public ResponseEntity<Products> replaceAProduct(@PathVariable("productId") Long productId, @RequestBody Products newProduct) {
+    public ResponseEntity<String> replaceAProduct(@PathVariable("productId") Long productId, @RequestBody Products newProduct) {
 
-        return null;
+        productService.replaceProduct(productId, newProduct);
+        return new ResponseEntity<>("Product with " +productId +" is replaced.",HttpStatus.OK);
     }
 
     @PatchMapping("/{productId}")
-    public ResponseEntity<Products> updateAProduct(@PathVariable("productId")  Long productId, @RequestBody Products newProduct) {
+    public ResponseEntity<String> updateAProduct(@PathVariable("productId")  Long productId, @RequestBody Products newProduct) {
 
-        return null;
+        productService.updateProduct(productId, newProduct);
+        return new ResponseEntity<>("Product with " +productId +" is updated.",HttpStatus.OK);
+
     }
 }
